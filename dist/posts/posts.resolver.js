@@ -16,9 +16,15 @@ exports.PostsResolver = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const post_model_1 = require("./models/post.model");
 const posts_service_1 = require("./posts.service");
+const graphql_subscriptions_1 = require("graphql-subscriptions");
+const create_comment_input_1 = require("../comments/inputs/create-comment.input");
+const comments_service_1 = require("../comments/comments.service");
+const comment_model_1 = require("../comments/models/comment.model");
+const pubSub = new graphql_subscriptions_1.PubSub();
 let PostsResolver = class PostsResolver {
-    constructor(postsService) {
+    constructor(postsService, commentsService) {
         this.postsService = postsService;
+        this.commentsService = commentsService;
     }
     async createPost(title, content, authorId) {
         return await this.postsService.create(title, content, authorId);
@@ -26,9 +32,14 @@ let PostsResolver = class PostsResolver {
     async posts(take, skip) {
         return await this.postsService.findAll(take, skip);
     }
+    async addComment(comment) {
+        const newComment = await this.commentsService.addComment(comment);
+        pubSub.publish('commentAdded', { commentAdded: newComment });
+        return newComment;
+    }
 };
 __decorate([
-    (0, graphql_1.Mutation)((returns) => post_model_1.Post),
+    (0, graphql_1.Mutation)(() => post_model_1.PostModel),
     __param(0, (0, graphql_1.Args)({ name: 'title', type: () => String })),
     __param(1, (0, graphql_1.Args)({ name: 'content', type: () => String })),
     __param(2, (0, graphql_1.Args)({ name: 'authorId', type: () => graphql_1.Int })),
@@ -37,16 +48,24 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostsResolver.prototype, "createPost", null);
 __decorate([
-    (0, graphql_1.Query)(() => [post_model_1.Post]),
+    (0, graphql_1.Query)(() => [post_model_1.PostModel]),
     __param(0, (0, graphql_1.Args)({ name: 'take', type: () => graphql_1.Int })),
     __param(1, (0, graphql_1.Args)({ name: 'skip', type: () => graphql_1.Int })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], PostsResolver.prototype, "posts", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => comment_model_1.CommentModel),
+    __param(0, (0, graphql_1.Args)('createCommentInput')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_comment_input_1.CreateCommentInput]),
+    __metadata("design:returntype", Promise)
+], PostsResolver.prototype, "addComment", null);
 PostsResolver = __decorate([
     (0, graphql_1.Resolver)(),
-    __metadata("design:paramtypes", [posts_service_1.PostsService])
+    __metadata("design:paramtypes", [posts_service_1.PostsService,
+        comments_service_1.CommentsService])
 ], PostsResolver);
 exports.PostsResolver = PostsResolver;
 //# sourceMappingURL=posts.resolver.js.map

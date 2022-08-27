@@ -17,6 +17,8 @@ const app_service_1 = require("./app.service");
 const authors_module_1 = require("./authors/authors.module");
 const posts_module_1 = require("./posts/posts.module");
 const prisma_module_1 = require("./prisma/prisma.module");
+const comments_module_1 = require("./comments/comments.module");
+const prisma_service_1 = require("./prisma/prisma.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -28,13 +30,17 @@ AppModule = __decorate([
                 sortSchema: true,
                 playground: false,
                 plugins: [(0, apollo_server_core_1.ApolloServerPluginLandingPageLocalDefault)()],
+                subscriptions: {
+                    'graphql-ws': true,
+                },
             }),
             authors_module_1.AuthorsModule,
             posts_module_1.PostsModule,
             prisma_module_1.PrismaModule,
+            comments_module_1.CommentsModule,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [app_service_1.AppService, prisma_service_1.PrismaService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

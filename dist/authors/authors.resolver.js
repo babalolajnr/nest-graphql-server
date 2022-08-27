@@ -18,6 +18,9 @@ const posts_service_1 = require("../posts/posts.service");
 const authors_service_1 = require("./authors.service");
 const create_author_input_1 = require("./inputs/create-author.input");
 const author_model_1 = require("./models/author.model");
+const graphql_subscriptions_1 = require("graphql-subscriptions");
+const comment_model_1 = require("../comments/models/comment.model");
+const pubSub = new graphql_subscriptions_1.PubSub();
 let AuthorsResolver = class AuthorsResolver {
     constructor(authorsService, postsService) {
         this.authorsService = authorsService;
@@ -27,34 +30,43 @@ let AuthorsResolver = class AuthorsResolver {
         return this.authorsService.findOneById(id);
     }
     async createAuthor(createAuthor) {
-        return this.authorsService.create(createAuthor);
+        return await this.authorsService.create(createAuthor);
     }
     async authors() {
         return this.authorsService.findAll();
     }
+    commentAdded() {
+        return pubSub.asyncIterator('commentAdded');
+    }
 };
 __decorate([
-    (0, graphql_1.Query)((returns) => author_model_1.Author),
+    (0, graphql_1.Query)((returns) => author_model_1.AuthorModel),
     __param(0, (0, graphql_1.Args)('id', { type: () => graphql_1.Int })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], AuthorsResolver.prototype, "author", null);
 __decorate([
-    (0, graphql_1.Mutation)((returns) => author_model_1.Author),
-    __param(0, (0, graphql_1.Args)('createAuthor')),
+    (0, graphql_1.Mutation)((returns) => author_model_1.AuthorModel),
+    __param(0, (0, graphql_1.Args)('createAuthorInput')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_author_input_1.CreateAuthor]),
+    __metadata("design:paramtypes", [create_author_input_1.CreateAuthorInput]),
     __metadata("design:returntype", Promise)
 ], AuthorsResolver.prototype, "createAuthor", null);
 __decorate([
-    (0, graphql_1.Query)((returns) => [author_model_1.Author]),
+    (0, graphql_1.Query)((returns) => [author_model_1.AuthorModel]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AuthorsResolver.prototype, "authors", null);
+__decorate([
+    (0, graphql_1.Subscription)((returns) => comment_model_1.CommentModel),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AuthorsResolver.prototype, "commentAdded", null);
 AuthorsResolver = __decorate([
-    (0, graphql_1.Resolver)((of) => author_model_1.Author),
+    (0, graphql_1.Resolver)(),
     __metadata("design:paramtypes", [authors_service_1.AuthorsService,
         posts_service_1.PostsService])
 ], AuthorsResolver);

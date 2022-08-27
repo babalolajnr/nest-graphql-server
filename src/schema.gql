@@ -2,17 +2,34 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Author {
+type AuthorModel {
+  comments: [CommentModel!]!
   createdAt: DateTime
   firstName: String
   id: Int!
   lastName: String
-  posts: [Post!]!
+  posts: [PostModel!]!
 }
 
-input CreateAuthor {
+type CommentModel {
+  author: AuthorModel!
+  authorId: Int!
+  body: String!
+  createdAt: DateTime!
+  id: Int!
+  post: PostModel!
+  postId: Int!
+}
+
+input CreateAuthorInput {
   firstName: String!
   lastName: String!
+}
+
+input CreateCommentInput {
+  authorId: Int!
+  body: String!
+  postId: Int!
 }
 
 """
@@ -21,13 +38,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
-  createAuthor(createAuthor: CreateAuthor!): Author!
-  createPost(authorId: Int!, content: String!, title: String!): Post!
+  addComment(createCommentInput: CreateCommentInput!): CommentModel!
+  createAuthor(createAuthorInput: CreateAuthorInput!): AuthorModel!
+  createPost(authorId: Int!, content: String!, title: String!): PostModel!
 }
 
-type Post {
-  author: Author!
+type PostModel {
+  author: AuthorModel!
   authorId: Int
+  comment: CommentModel
   content: String!
   createdAt: DateTime
   id: Int!
@@ -36,7 +55,11 @@ type Post {
 }
 
 type Query {
-  author(id: Int!): Author!
-  authors: [Author!]!
-  posts(skip: Int!, take: Int!): [Post!]!
+  author(id: Int!): AuthorModel!
+  authors: [AuthorModel!]!
+  posts(skip: Int!, take: Int!): [PostModel!]!
+}
+
+type Subscription {
+  commentAdded: CommentModel!
 }

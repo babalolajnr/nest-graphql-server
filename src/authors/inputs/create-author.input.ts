@@ -1,9 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { Author } from '../models/author.model';
+import { AuthorModel } from '../models/author.model';
 
 @InputType()
-export class CreateAuthor
-  implements Omit<Author, 'id' | 'createdAt' | 'posts'>
+export class CreateAuthorInput
+  implements Omit<AuthorModel, 'id' | 'createdAt' | 'posts' | 'comments'>
 {
   @Field()
   firstName: string;

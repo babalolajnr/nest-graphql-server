@@ -1,45 +1,54 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Args,
   Int,
   Mutation,
-  Parent,
   Query,
-  ResolveField,
   Resolver,
+  Subscription,
 } from '@nestjs/graphql';
 import { PostsService } from 'src/posts/posts.service';
 import { AuthorsService } from './authors.service';
-import { CreateAuthor } from './inputs/create-author.input';
-import { Author } from './models/author.model';
-import { Author as PrismaAuthor } from '@prisma/client';
+import { CreateAuthorInput } from './inputs/create-author.input';
+import { AuthorModel } from './models/author.model';
+import { Author } from '@prisma/client';
+import { PubSub } from 'graphql-subscriptions';
+import { CommentModel } from 'src/comments/models/comment.model';
 
-@Resolver((of) => Author)
+const pubSub = new PubSub();
+
+@Resolver()
 export class AuthorsResolver {
   constructor(
     private authorsService: AuthorsService,
     private postsService: PostsService,
   ) {}
 
-  @Query((returns) => Author)
+  @Query((returns) => AuthorModel)
   async author(@Args('id', { type: () => Int }) id: number) {
     return this.authorsService.findOneById(id);
   }
 
   // @ResolveField()
-  // async posts(@Parent() author: Author) {
+  // async posts(@Parent() author: AuthorModel) {
   //   const { id } = author;
   //   return this.postsService.findAll();
   // }
 
-  @Mutation((returns) => Author)
+  @Mutation((returns) => AuthorModel)
   async createAuthor(
-    @Args('createAuthor') createAuthor: CreateAuthor,
-  ): Promise<PrismaAuthor> {
-    return this.authorsService.create(createAuthor);
+    @Args('createAuthorInput') createAuthor: CreateAuthorInput,
+  ): Promise<Author> {
+    return await this.authorsService.create(createAuthor);
   }
 
-  @Query((returns) => [Author])
-  async authors(): Promise<PrismaAuthor[]> {
+  @Query((returns) => [AuthorModel])
+  async authors(): Promise<Author[]> {
     return this.authorsService.findAll();
+  }
+
+  @Subscription((returns) => CommentModel)
+  commentAdded() {
+    return pubSub.asyncIterator('commentAdded');
   }
 }

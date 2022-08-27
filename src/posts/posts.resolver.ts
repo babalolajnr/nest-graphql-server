@@ -1,26 +1,45 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Post } from './models/post.model';
+import { PostModel } from './models/post.model';
 import { PostsService } from './posts.service';
-import { Post as PrismaPost } from '@prisma/client';
+import { Comment, Post } from '@prisma/client';
+import { PubSub } from 'graphql-subscriptions';
+import { CreateCommentInput } from 'src/comments/inputs/create-comment.input';
+import { CommentsService } from 'src/comments/comments.service';
+import { CommentModel } from 'src/comments/models/comment.model';
+
+const pubSub = new PubSub();
 
 @Resolver()
 export class PostsResolver {
-  constructor(private postsService: PostsService) {}
+  constructor(
+    private postsService: PostsService,
+    private commentsService: CommentsService,
+  ) {}
 
-  @Mutation((returns) => Post)
+  @Mutation(() => PostModel)
   async createPost(
     @Args({ name: 'title', type: () => String }) title: string,
     @Args({ name: 'content', type: () => String }) content: string,
     @Args({ name: 'authorId', type: () => Int }) authorId: number,
-  ): Promise<PrismaPost> {
+  ): Promise<Post> {
     return await this.postsService.create(title, content, authorId);
   }
 
-  @Query(() => [Post])
+  @Query(() => [PostModel])
   async posts(
     @Args({ name: 'take', type: () => Int }) take: number,
     @Args({ name: 'skip', type: () => Int }) skip: number,
-  ): Promise<PrismaPost[]> {
+  ): Promise<Post[]> {
     return await this.postsService.findAll(take, skip);
+  }
+
+  @Mutation(() => CommentModel)
+  async addComment(
+    @Args('createCommentInput') comment: CreateCommentInput,
+  ): Promise<Comment> {
+    const newComment = await this.commentsService.addComment(comment);
+    pubSub.publish('commentAdded', { commentAdded: newComment });
+    return newComment;
   }
 }

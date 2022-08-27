@@ -1,9 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { Post } from '../models/post.model';
+import { PostModel } from '../models/post.model';
 
 @InputType()
 export class CreatePostInput
-  implements Pick<Post, 'title' | 'content' | 'authorId'>
+  implements Pick<PostModel, 'title' | 'content' | 'authorId'>
 {
   @Field()
   title: string;

@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Post } from 'src/posts/models/post.model';
-import { Author as AuthorModel } from '@prisma/client';
+import { PostModel } from 'src/posts/models/post.model';
+import { Author } from '@prisma/client';
+import { CommentModel } from 'src/comments/models/comment.model';
 
 @ObjectType()
-export class Author
-  implements Pick<AuthorModel, 'id' | 'firstName' | 'lastName' | 'createdAt'>
+export class AuthorModel
+  implements Pick<Author, 'id' | 'firstName' | 'lastName' | 'createdAt'>
 {
   @Field((type) => Int)
   id: number;
@@ -18,6 +20,9 @@ export class Author
   @Field({ nullable: true })
   createdAt: Date;
 
-  @Field((type) => [Post])
-  posts: Post[];
+  @Field((type) => [PostModel])
+  posts: PostModel[];
+
+  @Field((type) => [CommentModel])
+  comments: CommentModel[];
 }

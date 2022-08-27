@@ -9,20 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateAuthor = void 0;
+exports.CreateAuthorInput = void 0;
 const graphql_1 = require("@nestjs/graphql");
-let CreateAuthor = class CreateAuthor {
+let CreateAuthorInput = class CreateAuthorInput {
 };
 __decorate([
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
-], CreateAuthor.prototype, "firstName", void 0);
+], CreateAuthorInput.prototype, "firstName", void 0);
 __decorate([
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
-], CreateAuthor.prototype, "lastName", void 0);
-CreateAuthor = __decorate([
+], CreateAuthorInput.prototype, "lastName", void 0);
+CreateAuthorInput = __decorate([
     (0, graphql_1.InputType)()
-], CreateAuthor);
-exports.CreateAuthor = CreateAuthor;
+], CreateAuthorInput);
+exports.CreateAuthorInput = CreateAuthorInput;
 //# sourceMappingURL=create-author.input.js.map

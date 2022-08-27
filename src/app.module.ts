@@ -8,6 +8,8 @@ import { AppService } from './app.service';
 import { AuthorsModule } from './authors/authors.module';
 import { PostsModule } from './posts/posts.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { CommentsModule } from './comments/comments.module';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [
@@ -17,12 +19,16 @@ import { PrismaModule } from './prisma/prisma.module';
       sortSchema: true,
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      subscriptions: {
+        'graphql-ws': true,
+      },
     }),
     AuthorsModule,
     PostsModule,
     PrismaModule,
+    CommentsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}

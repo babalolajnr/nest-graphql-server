@@ -18,16 +18,33 @@ model Author {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  posts      Post[]
+
+  posts    Post[]
+  comments Comment[]
 
   @@map("authors")
 }
 
 model Post {
-  id    Int    @id @default(autoincrement())
-  title String
+  id      Int    @id @default(autoincrement())
+  title   String
   content String
-  votes Int    @default(0)
+  votes   Int    @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author   Author    @relation(fields: [authorId], references: [id])
+  authorId Int
+  Comment  Comment[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id   Int    @id @default(autoincrement())
+  body String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -36,5 +53,6 @@ model Post {
   author   Author @relation(fields: [authorId], references: [id])
   authorId Int
 
-  @@map("posts")
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
 }

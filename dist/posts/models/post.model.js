@@ -9,41 +9,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Post = void 0;
+exports.PostModel = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const author_model_1 = require("../../authors/models/author.model");
-let Post = class Post {
+const comment_model_1 = require("../../comments/models/comment.model");
+let PostModel = class PostModel {
 };
 __decorate([
-    (0, graphql_1.Field)((type) => graphql_1.Int),
+    (0, graphql_1.Field)(() => graphql_1.Int),
     __metadata("design:type", Number)
-], Post.prototype, "id", void 0);
+], PostModel.prototype, "id", void 0);
 __decorate([
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
-], Post.prototype, "title", void 0);
+], PostModel.prototype, "title", void 0);
 __decorate([
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
-], Post.prototype, "content", void 0);
+], PostModel.prototype, "content", void 0);
 __decorate([
-    (0, graphql_1.Field)((type) => graphql_1.Int, { nullable: true }),
+    (0, graphql_1.Field)(() => graphql_1.Int, { nullable: true }),
     __metadata("design:type", Number)
-], Post.prototype, "votes", void 0);
+], PostModel.prototype, "votes", void 0);
 __decorate([
-    (0, graphql_1.Field)((type) => graphql_1.Int, { nullable: true }),
+    (0, graphql_1.Field)(() => graphql_1.Int, { nullable: true }),
     __metadata("design:type", Number)
-], Post.prototype, "authorId", void 0);
+], PostModel.prototype, "authorId", void 0);
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Date)
-], Post.prototype, "createdAt", void 0);
+], PostModel.prototype, "createdAt", void 0);
 __decorate([
-    (0, graphql_1.Field)((type) => author_model_1.Author),
-    __metadata("design:type", author_model_1.Author)
-], Post.prototype, "author", void 0);
-Post = __decorate([
+    (0, graphql_1.Field)(() => author_model_1.AuthorModel),
+    __metadata("design:type", author_model_1.AuthorModel)
+], PostModel.prototype, "author", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => comment_model_1.CommentModel, { nullable: true }),
+    __metadata("design:type", comment_model_1.CommentModel)
+], PostModel.prototype, "comment", void 0);
+PostModel = __decorate([
     (0, graphql_1.ObjectType)()
-], Post);
-exports.Post = Post;
+], PostModel);
+exports.PostModel = PostModel;
 //# sourceMappingURL=post.model.js.map

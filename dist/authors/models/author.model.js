@@ -9,33 +9,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Author = void 0;
+exports.AuthorModel = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const post_model_1 = require("../../posts/models/post.model");
-let Author = class Author {
+const comment_model_1 = require("../../comments/models/comment.model");
+let AuthorModel = class AuthorModel {
 };
 __decorate([
     (0, graphql_1.Field)((type) => graphql_1.Int),
     __metadata("design:type", Number)
-], Author.prototype, "id", void 0);
+], AuthorModel.prototype, "id", void 0);
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Author.prototype, "firstName", void 0);
+], AuthorModel.prototype, "firstName", void 0);
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Author.prototype, "lastName", void 0);
+], AuthorModel.prototype, "lastName", void 0);
 __decorate([
     (0, graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Date)
-], Author.prototype, "createdAt", void 0);
+], AuthorModel.prototype, "createdAt", void 0);
 __decorate([
-    (0, graphql_1.Field)((type) => [post_model_1.Post]),
+    (0, graphql_1.Field)((type) => [post_model_1.PostModel]),
     __metadata("design:type", Array)
-], Author.prototype, "posts", void 0);
-Author = __decorate([
+], AuthorModel.prototype, "posts", void 0);
+__decorate([
+    (0, graphql_1.Field)((type) => [comment_model_1.CommentModel]),
+    __metadata("design:type", Array)
+], AuthorModel.prototype, "comments", void 0);
+AuthorModel = __decorate([
     (0, graphql_1.ObjectType)()
-], Author);
-exports.Author = Author;
+], AuthorModel);
+exports.AuthorModel = AuthorModel;
 //# sourceMappingURL=author.model.js.map

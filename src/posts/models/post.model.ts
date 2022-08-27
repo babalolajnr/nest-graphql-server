@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Post as PostModel } from '@prisma/client';
-import { Author } from 'src/authors/models/author.model';
+import { Post } from '@prisma/client';
+import { AuthorModel } from 'src/authors/models/author.model';
+import { CommentModel } from 'src/comments/models/comment.model';
 
 @ObjectType()
-export class Post implements Omit<PostModel, 'updatedAt' | 'deletedAt'> {
-  @Field((type) => Int)
+export class PostModel implements Omit<Post, 'updatedAt' | 'deletedAt'> {
+  @Field(() => Int)
   id: number;
 
   @Field()
@@ -14,15 +15,18 @@ export class Post implements Omit<PostModel, 'updatedAt' | 'deletedAt'> {
   @Field()
   content: string;
 
-  @Field((type) => Int, { nullable: true })
+  @Field(() => Int, { nullable: true })
   votes: number;
 
-  @Field((type) => Int, { nullable: true })
+  @Field(() => Int, { nullable: true })
   authorId: number;
 
   @Field({ nullable: true })
   createdAt: Date;
 
-  @Field((type) => Author)
-  author: Author;
+  @Field(() => AuthorModel)
+  author: AuthorModel;
+
+  @Field(() => CommentModel, { nullable: true })
+  comment: CommentModel;
 }
